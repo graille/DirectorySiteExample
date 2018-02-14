@@ -3,6 +3,7 @@
 class DirectoryController {
     /**
      * Add an entry in the directory
+     *
      * @param array $data
      */
     static function addEntry($data) {
@@ -11,7 +12,8 @@ class DirectoryController {
 
     /**
      * Set an entry in the directory
-     * @param int $id The id of the entry
+     *
+     * @param int   $id   The id of the entry
      * @param array $data The data array
      */
     static function setEntry($id, $data) {
@@ -20,7 +22,9 @@ class DirectoryController {
 
     /**
      * Return an entry of the directory
+     *
      * @param int $id The entry id
+     *
      * @return array The entry data
      */
     static function getEntry($id) {
