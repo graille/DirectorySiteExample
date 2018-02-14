@@ -1,0 +1,101 @@
+.head-box {
+    transition: all 0.2s ease-in;
+
+    padding:20px;
+    height: 400px;
+}
+
+.box-header {
+    position: relative;
+    overflow: hidden;
+    color: #333;
+    height: 150px;
+    transition: all 0.4s ease-out;
+
+    text-shadow: 1px 0 0 #fff, -1px 0 0 #fff, 0 1px 0 #fff, 0 -1px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+}
+
+.box-header .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: all 0.4s ease-out;
+    background: url("../images/concert1.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+.head-box:hover {
+    background-color: bisque;
+}
+
+.head-box:hover .box-header {
+    color: white;
+    text-shadow: none;
+}
+
+.head-box:hover .background {
+    filter: blur(2px);
+    background-position: bottom;
+}
+
+.box-header .title {
+    position: absolute;
+
+    top: 50%;
+    transform: translateY(-50%);
+
+    font-size: 30px;
+    text-align: left;
+    padding-left: 20px;
+    width: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.box-header .subtitle {
+    font-size: 10px;
+}
+
+.box-header .picture {
+    position: absolute;
+    top: 0;
+    right: 0;
+    float: right;
+    height: 100%;
+    overflow: hidden;
+}
+
+.box-header .picture img {
+    height: 100%;
+    border-left: 5px solid white;
+}
+
+.icon-container {
+    /* hauteur puis baseline */
+    display: inline-block;
+    line-height: 48px;
+    width: 100%;
+}
+
+.icon-container a {
+    /* largeur */
+    display: inline-block;
+    width: 80px;
+    /* centrage element puis contenu */
+    vertical-align: middle;
+    text-align: center;
+}
+
+.icon-container img {
+    width: 40px;
+    filter: grayscale(100%);
+
+    transition: all 0.4s ease;
+}
+
+.icon-container img:hover {
+    filter: grayscale(0%);
+    transform: rotate(5deg);
+}
