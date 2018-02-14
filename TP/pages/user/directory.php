@@ -1,4 +1,4 @@
-<?php include "./components/annuaire-box.php"; ?>
+<?php include "./components/directory-box.php"; ?>
 
 <div class="section-body">
     <table class="width-full">

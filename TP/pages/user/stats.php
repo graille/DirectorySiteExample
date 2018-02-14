@@ -1,4 +1,4 @@
-<?php include "./components/annuaire-box.php"; ?>
+<?php include "./components/directory-box.php"; ?>
 
 <div class="section-body">
     <div class="row width-full">
@@ -10,9 +10,13 @@
             </div>
             <div class="col-6">
                 <h2>Nombre de personnes dans l'annuaire</h2>
+
+                <?= StatsController::getNumber() ?>
             </div>
             <div class="col-6">
                 <h2>Nombre de consultations de l'annuaire</h2>
+
+                <?= StatsController::getVisit() ?>
             </div>
             <div class="col-6">
                 <h2>Dernière personne ajoutée</h2>

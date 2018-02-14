@@ -32,7 +32,8 @@
 
 <section id="main-section">
     <?php
-        autoloader();
+        include "autoloader.php";
+        autoload();
 
         $action = (!empty($_GET['action'])) ? $_GET['action'] : 'user.directory';
         $action = explode('.', $action);
