@@ -1,0 +1,146 @@
+body {
+    margin: 0;
+}
+
+header {
+    position: relative;
+    overflow: hidden;
+    color: #333;
+    height: 200px;
+    transition: all 0.4s ease-out;
+}
+
+header .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: all 0.4s ease-out;
+    background: url("images/spacex.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+header:hover {
+    height: 300px;
+    color: white;
+}
+
+header:hover .background {
+    filter: blur(2px);
+    background-position: bottom;
+}
+
+header .title {
+    position: absolute;
+
+    top: 50%;
+    transform: translateY(-50%);
+
+    font-size: 70px;
+    text-align: center;
+    width: 100%;
+    font-family: Arial, sans-serif;
+}
+
+header .subtitle {
+    font-size: 20px;
+}
+
+header .picture {
+    position: absolute;
+    top: 0;
+    right: 0;
+    float: right;
+    height: 100%;
+    overflow: hidden;
+}
+
+header .picture img {
+    height: 100%;
+    border-left: 5px solid white;
+}
+
+/* Main section */
+section.main-body {
+    margin-bottom: 150px;
+}
+
+table.tbl {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.tbl tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.tbl td:nth-child(odd) {
+    text-align: center;
+    font-weight: bold
+}
+
+.tbl td {
+    text-align: left;
+    padding: 8px;
+
+}
+
+.tbl a {
+    text-decoration: none;
+    color: cornflowerblue;
+}
+
+.tbl tr {
+    height: 100px;
+}
+
+.icon-container {
+    /* hauteur puis baseline */
+    display: inline-block;
+    line-height: 48px;
+    width: 100%;
+}
+
+.icon-container a {
+    /* largeur */
+    display: inline-block;
+    width: 33%;
+    /* centrage element puis contenu */
+    vertical-align: middle;
+    text-align: center;
+}
+
+.icon-container img {
+    width: 100px;
+    filter: grayscale(100%);
+
+    transition: all 0.4s ease;
+}
+
+.icon-container img:hover {
+    filter: grayscale(0%);
+    transform: rotate(5deg);
+}
+
+/* FOOTER */
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: bisque;
+    color: #333;
+    height: 150px;
+    width: 100%;
+    text-align: center;
+}
+
+footer .text {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    text-align: center;
+}
