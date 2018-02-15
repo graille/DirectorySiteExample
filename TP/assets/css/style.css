@@ -7,6 +7,7 @@ body {
     padding:0;
     margin:0;
     font-family: 'Indie Flower', cursive;
+    color: #333;
 }
 
 
@@ -62,40 +63,59 @@ body {
 }
 
 
-table.tbl {
+table.tbl, table.tbl2 {
     border-collapse: collapse;
     width: 100%;
 }
 
-.tbl tr:nth-child(even) {
+table.tbl tr:nth-child(even), table.tbl2 tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-.tbl td:nth-child(odd) {
+table.tbl td:nth-child(odd) {
     text-align: center;
     font-weight: bold
 }
 
-.tbl td {
+table.tbl td {
     text-align: left;
     padding: 8px;
 }
 
-.tbl a {
+table.tbl2 td {
+    text-align: center;
+    transition: all 0.4s ease;
+    padding: 20px;
+}
+
+table.tbl a, table.tbl2 a {
     text-decoration: none;
     color: cornflowerblue;
 }
 
-.tbl tr {
+table.tbl tr, table.tbl2 tr {
     height: 50px;
 }
 
-.tbl h2 {
+h2 {
     width: 100%;
     background-color: cornflowerblue;
     color:white;
     padding-top: 20px;
     padding-bottom: 20px;
+    border-radius: 5px 10px 30px 5px;
 
     text-align: center;
+
+    transition: all 0.4s ease;
+}
+
+table.tbl2 td:hover {
+    background-color: cornflowerblue;
+    color:white;
+}
+table.tbl2 td:hover h2 {
+    background-color: white;
+    border-radius: 50px 5px 10px 15px;
+    color:#333;
 }

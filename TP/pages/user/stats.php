@@ -1,7 +1,7 @@
 <?php include "./components/directory-box.php"; ?>
 
 <div class="section-body">
-    <table class="tbl width-full">
+    <table class="tbl2 width-full">
         <tr>
             <td style="width: 50%">
                 <h2>Répartition par catégories</h2>
