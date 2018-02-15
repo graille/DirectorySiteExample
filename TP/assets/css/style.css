@@ -6,6 +6,7 @@ body {
     height: 100%;
     padding:0;
     margin:0;
+    font-family: 'Indie Flower', cursive;
 }
 
 
@@ -87,4 +88,14 @@ table.tbl {
 
 .tbl tr {
     height: 50px;
+}
+
+.tbl h2 {
+    width: 100%;
+    background-color: cornflowerblue;
+    color:white;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    text-align: center;
 }

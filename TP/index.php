@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>TP Atelier - Un annuaire</title>
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="assets/css/box.css">
     <link rel="stylesheet" type="text/css" href="assets/css/nav.css">
