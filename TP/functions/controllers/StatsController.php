@@ -21,10 +21,13 @@ class StatsController {
      */
     static public function getGenderRepartition() {
         // TODO
-        return [
-            'male' => 200,
-            'female' => 452,
-        ];
+        return [[
+            "Hommes",
+            "Femmes"
+        ], [
+            500,
+            200
+        ]];
     }
 
     /**
@@ -32,9 +35,13 @@ class StatsController {
      */
     static public function getCategoriesRepartition() {
         // TODO
-        return [
-            'teacher' => 500
-        ];
+        return [[
+            "Enseignant",
+            "Etudiant"
+        ], [
+            500,
+            200
+        ]];
     }
 
     /**
