@@ -5,6 +5,7 @@
     <title>TP Atelier - Un annuaire</title>
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
 
+    <link rel="stylesheet" type="text/css" href="assets/css/form.css">
     <link rel="stylesheet" type="text/css" href="assets/css/box.css">
     <link rel="stylesheet" type="text/css" href="assets/css/nav.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
@@ -16,9 +17,9 @@
     <img src="./assets/images/icone_annuaire.png" alt="Annuaire" class="logo"/>
     <div class="h-line"></div>
     <ul>
-        <li><a href="?action=homepage">Accueil</a></li>
-        <li><a href="?action=directory">Annuaire</a></li>
-        <li><a href="?action=stats">Statistiques</a></li>
+        <li><a href="?page=homepage">Accueil</a></li>
+        <li><a href="?page=directory">Annuaire</a></li>
+        <li><a href="?page=stats">Statistiques</a></li>
     </ul>
 
     <div class="h-line"></div>
@@ -26,7 +27,7 @@
         <li style="
             background: url('assets/images/warning.png');
             text-shadow: 2px 0 0 #333, -2px 0 0 #333, 0 2px 0 #333, 0 -2px 0 #333, 1px 1px #333, -1px -1px 0 #333, 1px -1px 0 #333, -1px 1px 0 #333;">
-            <a href="?action=admin.homepage" >Administration</a>
+            <a href="?page=admin.homepage">Administration</a>
         </li>
     </ul>
 </nav>
@@ -36,7 +37,7 @@
         include "autoloader.php";
         autoload();
 
-        $action = (!empty($_GET['action'])) ? $_GET['action'] : 'user.directory';
+        $action = (!empty($_GET['page'])) ? $_GET['page'] : 'user.directory';
         $action = explode('.', $action);
 
         if(count($action) === 2) {
