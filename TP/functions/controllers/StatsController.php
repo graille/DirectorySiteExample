@@ -47,6 +47,20 @@ class StatsController {
         ]];
     }
 
+    static public function getPageStats() {
+        // TODO
+        return [
+            [
+                'user.homepage',
+                'user.directory...'
+            ],
+            [
+                1.151454,
+                1.1471
+            ]
+        ];
+    }
+
     /**
      * @return int The number of people in directory
      */
