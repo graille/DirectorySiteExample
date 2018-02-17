@@ -14,7 +14,7 @@ class EntryModel {
     /**
      * @return PDOStatement
      */
-    static public function getEntries() {
+    static public function get() {
         $query = self::getBaseQuery();
         return PDOManipulator::create()
             ->query($query);
@@ -22,11 +22,12 @@ class EntryModel {
 
     /**
      * @param $id
+     *
      * @return bool
      */
-    static public function getEntry($id) {
+    static public function getOne($id) {
         $query = self::getBaseQuery();
-        $query.= "WHERE e.id :id";
+        $query .= "WHERE e.id :id";
 
         return PDOManipulator::create()
             ->query($query)
@@ -34,54 +35,66 @@ class EntryModel {
     }
 
     /**
-     * @param $data
+     * @param array $data
+     *
      * @throws Exception
      */
     static public function validateData(&$data) {
-        if(!in_array($gender = $data['gender'], ['male', 'female']))
+        if (!in_array($gender = $data['gender'], ['male', 'female']))
             throw new Exception("{$gender} gender undefined");
 
-        if(!filter_var($email = $data['email'], FILTER_VALIDATE_EMAIL))
+        if (!filter_var($email = $data['email'], FILTER_VALIDATE_EMAIL))
             throw new Exception("The email {$email} is invalid");
 
-        if(!filter_var($url = $data['website'], FILTER_VALIDATE_URL))
+        if (!filter_var($url = $data['website'], FILTER_VALIDATE_URL))
             throw new Exception("The url {$url} is invalid");
 
-        if(!filter_var($url = $data['twitter'], FILTER_VALIDATE_URL))
+        if (!filter_var($url = $data['twitter'], FILTER_VALIDATE_URL))
             throw new Exception("The url {$url} is invalid");
 
-        if(!filter_var($url = $data['facebook'], FILTER_VALIDATE_URL))
+        if (!filter_var($url = $data['facebook'], FILTER_VALIDATE_URL))
             throw new Exception("The url {$url} is invalid");
 
-        if(!filter_var($url = $data['linkedin'], FILTER_VALIDATE_URL))
+        if (!filter_var($url = $data['linkedin'], FILTER_VALIDATE_URL))
             throw new Exception("The url {$url} is invalid");
 
-        if(!file_exists($path = $data['image_path']))
+        if (!file_exists($path = $data['image_path']))
             throw new Exception("The file with path {$path} does not exist");
     }
 
     /**
-     * @param $data
+     * @param array $data
      */
     static public function escapeData(&$data) {
-        $data['first_name'] = htmlentities($data['first_name']);
-        $data['last_name'] = htmlentities($data['last_name']);
+        $data['first_name'] = htmlspecialchars($data['first_name']);
+        $data['last_name'] = htmlspecialchars($data['last_name']);
         $data['birthdate'] = intval($data['birthdate']);
-        $data['email'] = htmlentities($data['email']);
-        $data['gender'] = htmlentities($data['gender']);
+        $data['email'] = htmlspecialchars($data['email']);
+        $data['gender'] = htmlspecialchars($data['gender']);
 
-        $data['image_path'] = htmlentities($data['image_path']);
+        $data['image_path'] = htmlspecialchars($data['image_path']);
 
         $data["category_id"] = intval($data["category_id"]);
 
-        $data['website'] = htmlentities($data['website']);
-        $data['twitter'] = htmlentities($data['twitter']);
-        $data['facebook'] = htmlentities($data['facebook']);
-        $data['linkedin'] = htmlentities($data['linkedin']);
+        $data['website'] = htmlspecialchars($data['website']);
+        $data['twitter'] = htmlspecialchars($data['twitter']);
+        $data['facebook'] = htmlspecialchars($data['facebook']);
+        $data['linkedin'] = htmlspecialchars($data['linkedin']);
     }
 
     /**
-     * @param $data
+     * Replace PDOStatement parameters with goods parameters
+     * @param array        $data
+     * @param PDOStatement $pdo
+     */
+    static private function pdoBind($data, &$pdo) {
+        foreach ($data as $key => $datum)
+            $pdo->bindParam($key, $datum);
+    }
+
+    /**
+     * @param array $data
+     *
      * @throws Exception
      */
     static public function addEntry($data) {
@@ -90,21 +103,55 @@ class EntryModel {
 
         $query = "INSERT INTO entries VALUES (
             '',
-            {$data['first_name']}, 
-            {$data['last_name']},
-            {$data['birthdate']},
-            {$data['email']},
-            {$data['image_path']},
-            {$data["category_id"]},
-            {$data['gender']},
-            {$data['website']},
-            {$data['twitter']},
-            {$data['facebook']},
-            {$data['linkedin']},
+            :first_name, 
+            :last_name,
+            :birthday,
+            :email,
+            
+            :image_path,
+            :category_id,
+            :gender,
+            
+            :website,
+            :twitter,
+            :facebook,
+            :linkedin,
         )";
 
-        PDOManipulator::create()
-            ->query($query)
-            ->execute();
+        $pdo = PDOManipulator::create()
+            ->query($query);
+
+        self::pdoBind($data, $pdo);
+        $pdo->execute();
+    }
+
+    static public function updateEntry($id, $data) {
+        self::validateData($data);
+        self::escapeData($data);
+
+        $query = "UPDATE entries
+                SET 
+                    first_name = :first_name,
+                    last_name = :lastname,
+                    birthday = :birthday,
+                    email = :email,
+                    gender = :gender,
+                    
+                    image_path = :image_path,
+                    category_id = :category_id,
+                    
+                    website = :website,
+                    linkedin = :linkedin,
+                    facebook = :facebook,
+                    twitter = :twitter
+                WHERE id = :id";
+
+        $pdo = PDOManipulator::create()
+            ->query($query);
+
+        $pdo->bindParam('id', $id);
+
+        self::pdoBind($data, $pdo);
+        $pdo->execute();
     }
 }

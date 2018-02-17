@@ -10,6 +10,7 @@ class CategoryModel {
     }
 
     /**
+     * Return all categories
      * @return PDOStatement
      */
     static public function get() {
@@ -19,15 +20,17 @@ class CategoryModel {
     }
 
     /**
+     * Return the category specified by id {$id}
+     *
      * @param $id
-     * @return bool
+     *
+     * @return PDOStatement
      */
     static public function getOne($id) {
         $query = self::getBaseQuery();
-        $query.= "WHERE e.id :id";
+        $query.= "WHERE e.id = {$id}";
 
         return PDOManipulator::create()
-            ->query($query)
-            ->bindParam('id', $id);
+            ->query($query);
     }
 }

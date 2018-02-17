@@ -13,8 +13,10 @@ class StatsController {
      * Add a visit
      */
     static public function addVisit() {
-        PDOManipulator::create()->query("INSERT INTO visit 
-              VALUES ('', {time()}, '{$_SERVER['REMOTE_ADDR']}')");
+        PDOManipulator::create()->query("
+              INSERT INTO visit 
+              VALUES ('', {time()}, '{$_SERVER['REMOTE_ADDR']}')
+        ");
     }
 
     /**
