@@ -4,10 +4,11 @@ html {
 
 body {
     height: 100%;
-    padding:0;
     margin:0;
     font-family: 'Indie Flower', cursive;
     color: #333;
+    background-color: bisque;
+    overflow: auto;
 }
 
 
@@ -48,11 +49,8 @@ body {
 #main-section {
     padding:0;
     margin-left:300px;
-    background-color: bisque;
     width: calc(100% - 300px);
-    height: 100%;
-
-    overflow: auto;
+    overflow: hidden;
 }
 
 .section-body {
@@ -60,6 +58,7 @@ body {
     background-color: white;
     margin:auto;
     padding: 30px;
+    margin-top: 20px;
 }
 
 

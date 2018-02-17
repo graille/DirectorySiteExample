@@ -35,25 +35,49 @@ class EntryModel {
 
     /**
      * @param $data
-     * @return array
      * @throws Exception
      */
-    static private function processData($data) {
-        $result = [];
-
-        $result['first_name'] = htmlentities($data['first_name']);
-        $result['last_name'] = htmlentities($data['last_name']);
-        $result['birthdate'] = intval($data['birthdate']);
-        $result['email'] = htmlentities($data['email']);
-        $result['image_path'] = htmlentities($data['image_path']);
-        $result["category_id"] = intval($data["category_id"]);
-        $result['gender'] = htmlentities($data['gender']);
-        $result['personal_page'] = htmlentities($data['personal_page']);
-
-        if(!in_array($result['gender'], ['male', 'female']))
+    static public function validateData(&$data) {
+        if(!in_array($gender = $data['gender'], ['male', 'female']))
             throw new Exception("{$gender} gender undefined");
 
-        return $result;
+        if(!filter_var($email = $data['email'], FILTER_VALIDATE_EMAIL))
+            throw new Exception("The email {$email} is invalid");
+
+        if(!filter_var($url = $data['website'], FILTER_VALIDATE_URL))
+            throw new Exception("The url {$url} is invalid");
+
+        if(!filter_var($url = $data['twitter'], FILTER_VALIDATE_URL))
+            throw new Exception("The url {$url} is invalid");
+
+        if(!filter_var($url = $data['facebook'], FILTER_VALIDATE_URL))
+            throw new Exception("The url {$url} is invalid");
+
+        if(!filter_var($url = $data['linkedin'], FILTER_VALIDATE_URL))
+            throw new Exception("The url {$url} is invalid");
+
+        if(!file_exists($path = $data['image_path']))
+            throw new Exception("The file with path {$path} does not exist");
+    }
+
+    /**
+     * @param $data
+     */
+    static public function escapeData(&$data) {
+        $data['first_name'] = htmlentities($data['first_name']);
+        $data['last_name'] = htmlentities($data['last_name']);
+        $data['birthdate'] = intval($data['birthdate']);
+        $data['email'] = htmlentities($data['email']);
+        $data['gender'] = htmlentities($data['gender']);
+
+        $data['image_path'] = htmlentities($data['image_path']);
+
+        $data["category_id"] = intval($data["category_id"]);
+
+        $data['website'] = htmlentities($data['website']);
+        $data['twitter'] = htmlentities($data['twitter']);
+        $data['facebook'] = htmlentities($data['facebook']);
+        $data['linkedin'] = htmlentities($data['linkedin']);
     }
 
     /**
@@ -61,22 +85,26 @@ class EntryModel {
      * @throws Exception
      */
     static public function addEntry($data) {
-        $result = self::processData($data);
+        self::validateData($data);
+        self::escapeData($data);
 
         $query = "INSERT INTO entries VALUES (
             '',
-            {$result['first_name']}, 
-            {$result['last_name']},
-            {$result['birthdate']},
-            {$result['email']},
-            {$result['image_path']},
-            {$result["category_id"]},
-            {$result['gender']},
-            {$result['personal_page']}
+            {$data['first_name']}, 
+            {$data['last_name']},
+            {$data['birthdate']},
+            {$data['email']},
+            {$data['image_path']},
+            {$data["category_id"]},
+            {$data['gender']},
+            {$data['website']},
+            {$data['twitter']},
+            {$data['facebook']},
+            {$data['linkedin']},
         )";
 
         PDOManipulator::create()
             ->query($query)
-            ->exec();
+            ->execute();
     }
 }
