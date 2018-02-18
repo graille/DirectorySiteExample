@@ -59,19 +59,11 @@ class EntryModel {
         if (!filter_var($email = $data['email'], FILTER_VALIDATE_EMAIL))
             throw new Exception("L'email {$email} est invalide");
 
-        if (!filter_var($url = $data['website'], FILTER_VALIDATE_URL))
-            throw new Exception("L'url {$url} est invalide");
+        foreach (['website', 'twitter', 'facebook', 'linkedin'] as $item)
+            if (!filter_var($url = $data[$item], FILTER_VALIDATE_URL))
+                throw new Exception("L'url {$url} associée au compte {$item} est invalide");
 
-        if (!filter_var($url = $data['twitter'], FILTER_VALIDATE_URL))
-            throw new Exception("L'url {$url} est invalide");
-
-        if (!filter_var($url = $data['facebook'], FILTER_VALIDATE_URL))
-            throw new Exception("L'url {$url} est invalide");
-
-        if (!filter_var($url = $data['linkedin'], FILTER_VALIDATE_URL))
-            throw new Exception("L'url {$url} est invalide");
-
-        if (!file_exists($path = $data['image_path']))
+        if (!file_exists($path = $data['image_path']) && !is_null($path)) // L'image n'est pas obligatoire
             throw new Exception("Le fichier avec le chemin {$path} n'existe pas");
 
         if(CategoryModel::getOne(intval($data['category_id']))->rowCount() === 0)
@@ -118,6 +110,7 @@ class EntryModel {
     /**
      * @param array $data
      *
+     * @return int The id of the new entry
      * @throws Exception
      */
     static public function addEntry($data) {
@@ -125,7 +118,7 @@ class EntryModel {
         $data = self::escapeData($data);
 
         $query = "INSERT INTO entries 
-          (id, firstname, lastname, birthdate, email, image_path, category_id, gender, website, twitter, facebook, linkedin) 
+          (id, firstname, lastname, birthday, email, image_path, category_id, gender, website, twitter, facebook, linkedin) 
           VALUES (
             '',
             :firstname, 
@@ -143,15 +136,18 @@ class EntryModel {
             :linkedin
         );";
 
-        PDOManipulator::create()
-            ->prepare($query)
+        $pdo = PDOManipulator::create();
+        $pdo->prepare($query)
             ->execute($data);
+
+        return intval($pdo->lastInsertId());
     }
 
     /**
-     * @param $id
-     * @param $data
+     * @param int $id
+     * @param array $data
      *
+     * @return mixed
      * @throws Exception
      */
     static public function updateEntry($id, $data) {
@@ -179,7 +175,8 @@ class EntryModel {
             ->prepare($query);
 
         $pdo->bindParam('id', $id);
-
         $pdo->execute($data);
+
+        return $id;
     }
 }

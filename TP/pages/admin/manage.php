@@ -1,82 +1,107 @@
 <?php
-    // If we want to edit an existing entry
-    if(!empty($_GET['id'])) {
-        $editEntry = EntryModel::getOne(intval($_GET['id']));
+try {
+    /**
+     * Si on veut editer une entrée existante, on la charge
+     */
+    $loadedEntryData = null;
+    $validImageExtensions = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'bmp', 'ico', 'tif'];
+    $completed = false;
+    $editMode = false;
+    if (!empty($_GET['id'])) {
+        $loadedEntry = EntryModel::getOne(intval($_GET['id']));
 
-        if($editEntry->rowCount() > 0)
-            $loadedEntry = $editEntry->fetch();
-    }
-
-    $validExtensions = array('jpg', 'jpeg', 'gif', 'png');
-    if(array_key_exists('form_token', $_POST)) {
-        try {
-            $data = $_POST;
-
-            // Manage birthday
-            if(!empty($_POST["birthday"]))
-                $data['birthday'] = strtotime($data['birthday']);
-
-            // Manage Image
-            if (!empty($_FILES['image'])) {
-                // Check errors
-                if ($_FILES['image']['error'] > 0)
-                    throw new Exception("Erreur lors du transfert de l'image");
-
-                // Check size
-                if ($_FILES['image']['size'] > 512000)
-                    throw new Exception("Le fichier est trop gros : {$_FILES['image']['size']} octets");
-
-                // Check extension
-                $extension = strtolower(substr(strrchr($_FILES['image']['name'], '.'), 1));
-                if (!in_array($extension, $validExtensions)) throw new Exception("Extension incorrecte");
-
-                // Move image
-                if(!file_exists('uploads/avatars'))
-                    mkdir('uploads/avatars', 0777, true);
-
-                $name = md5(uniqid(rand(), true));
-                $path = "uploads/avatars/{$name}.{$extension}";
-                $result = move_uploaded_file($_FILES['image']['tmp_name'], $path);
-                if (!$result) throw new Exception("Le transfert de l'image à échoué");
-
-                // Rewrite $_POST
-                $data['image_path'] = $path;
-            }
-
-            // Manage category
-            if(!empty($_POST['category_str'])) {
-                // Check that the category does not exist
-                $finder = CategoryModel::getOneByName($_POST['category_str']);
-                if($finder->rowCount() === 0) {
-                    $name = $_POST['category_str'];
-                    CategoryModel::add($name);
-                    $data['category_id'] = CategoryModel::getOneByName($name)['id'];
-                }
-                else
-                    $data['category_id'] = $finder->fetch()['id'];
-            }
-            else {
-                if(empty($_POST['category_id']) || $_POST['category_id'] === "")
-                    throw new Exception("Vous devez choisir une catégorie ou un créer une nouvelle");
-            }
-
-            EntryModel::addEntry($data);
-        }
-        catch (Exception $e) {
-            $error = $e->getMessage();
+        if ($loadedEntry->rowCount() > 0) {
+            $loadedEntryData = $loadedEntry->fetch();
+            $editMode = true;
         }
     }
 
-    function getValue($parameter) {
-        global $loadedEntry;
-        if(isset($loadedEntry) && !empty($loadedEntry)) {
 
-            if (array_key_exists($parameter, $loadedEntry))
-                return $loadedEntry[$parameter];
+
+    /**
+     * Si le formulaire a été posté, on le traite
+     */
+    if (array_key_exists('form_token', $_POST)) {
+        $data = $_POST;
+
+        // Manage birthday
+        if (!empty($_POST["birthday"]))
+            $data['birthday'] = strtotime($data['birthday']);
+
+        // Manage Image
+        if (!empty($_FILES['image']) && file_exists($_FILES['image']['tmp_name']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
+            // Check errors
+            if ($_FILES['image']['error'] > 0)
+                throw new Exception("Erreur lors du transfert de l'image");
+
+            // Check size
+            if ($_FILES['image']['size'] > 512000)
+                throw new Exception("Le fichier est trop gros : {$_FILES['image']['size']} octets");
+
+            // Check extension
+            $extension = strtolower(substr(strrchr($_FILES['image']['name'], '.'), 1));
+            if (!in_array($extension, $validImageExtensions))
+                throw new Exception("Extension incorrecte, les extensions autorisées sont : " . DataManipulator::transformArrayToString($validImageExtensions));
+
+            // Move image
+            if (!file_exists('uploads/avatars'))
+                mkdir('uploads/avatars', 0777, true);
+
+            $name = md5(uniqid(rand(), true));
+            $path = "uploads/avatars/{$name}.{$extension}";
+            $result = move_uploaded_file($_FILES['image']['tmp_name'], $path);
+            if (!$result) throw new Exception("Le transfert de l'image à échoué");
+
+            // Rewrite $_POST
+            $data['image_path'] = $path;
+        }
+        else {
+            if (!is_null($tmpPath = getValue('image_path')))
+                $data['image_path'] = $tmpPath;
+            else
+                $data['image_path'] = null;
         }
 
-        return null;
+        // Manage category
+        if (!empty($_POST['category_str'])) {
+            // Check that the category does not exist
+            $finder = CategoryModel::getOneByName($_POST['category_str']);
+            if ($finder->rowCount() === 0) {
+                $name = $_POST['category_str'];
+                CategoryModel::add($name);
+                $data['category_id'] = (CategoryModel::getOneByName($name)->fetch())['id'];
+            } else
+                $data['category_id'] = $finder->fetch()['id'];
+        } else {
+            if (empty($_POST['category_id']) || $_POST['category_id'] === "")
+                throw new Exception("Vous devez choisir une catégorie ou un créer une nouvelle");
+        }
+
+        // On sauvegarde les résultats
+        if(!$editMode)
+            $entryId = EntryModel::addEntry($data);
+        else
+            $entryId = EntryModel::updateEntry(intval($_GET['id']), $data);
+
+        $completed = true;
+
+        // On passe en mode edition sur la nouvelle entrée
+        $loadedEntryData = EntryModel::getOne($entryId)->fetch();
     }
+} catch (Exception $e) {
+    // En cas d'erreur, on redirige tout vers la variable {$error}
+    $error = $e->getMessage();
+}
+
+function getValue($parameter) {
+    global $loadedEntryData;
+    if (isset($loadedEntryData) && !empty($loadedEntryData) && !is_null($loadedEntryData))
+        if (array_key_exists($parameter, $loadedEntryData))
+            return $loadedEntryData[$parameter];
+
+    return null;
+}
+
 ?>
 
 <div class="section-body">
@@ -86,7 +111,25 @@
         </div>
     <?php } ?>
 
-    <h2>Ajout d'une entrée dans l'annuaire</h2>
+    <?php if(isset($completed) && $completed) { ?>
+        <div class="width-full" style="background-color: green; color: white; padding: 20px">
+            <?php if($editMode) { ?>
+                Modification de <?= getValue('firstname').' '.getValue('lastname') ?> efféctuée
+            <?php } else { ?>
+                Ajout de <?= getValue('firstname').' '.getValue('lastname') ?> efféctuée
+            <?php } ?>
+        </div>
+    <?php } ?>
+
+    <?php if(!$editMode) { ?>
+        <h2>Ajout d'une entrée dans l'annuaire</h2>
+    <?php } else { ?>
+        <a href="?page=admin.manage">
+            <button class="width-full btn">Ajouter une nouvelle entrée</button>
+        </a>
+
+        <h2 style="background-color: orangered">Modification d'une entrée dans l'annuaire</h2>
+    <?php } ?>
 
     <form action="" method="post" enctype="multipart/form-data">
         <fieldset>
@@ -107,10 +150,10 @@
 
             <table class="width-full">
                 <tr>
-                    <td style="width: <?= (getValue('image_path')) ? '70%': '100%' ?>">
+                    <td style="width: <?= (!is_null(getValue('image_path')) && $editMode) ? '70%': '100%' ?>">
                         <input type="file" class="form-control" name="image"/>
                     </td>
-                    <?php if(getValue('image_path') !== null) { ?>
+                    <?php if(!is_null(getValue('image_path')) && $editMode) { ?>
                     <td style="text-align: center">
                         <img src="<?= getValue('image_path') ?>"
                              alt="<?= getValue('firstname').getValue('lastname') ?>"

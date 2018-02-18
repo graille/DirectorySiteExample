@@ -1,10 +1,10 @@
 <?php
 function generateHeadListEntry($data = [], $isAdmin = false) {
     ?>
-    <td><img src="<?= $data['image_path'] ?>" style="max-height: 200px;"/></td>
+    <td><img src="<?= $data['image_path'] ?>" alt="<?= $data["firstname"] ?>" style="max-height: 200px; border-radius: 10px;"/></td>
     <td><?= $data['firstname'] ?></td>
     <td><?= $data['lastname'] ?></td>
-    <td><?= Utils::calculateAgeFromTimestamp($data['birthday']) ?></td>
+    <td><?= Utils::calculateAgeFromTimestamp($data['birthday']) ?> ans</td>
     <td><?= $data['category_name'] ?></td>
 
     <?php if ($isAdmin) { ?>
@@ -14,7 +14,7 @@ function generateHeadListEntry($data = [], $isAdmin = false) {
             </a>
         </td>
         <td>
-            <a href="?page=admin.manage&&action=edit&&id=<?= $data['id'] ?>">
+            <a href="?page=admin.manage&&id=<?= $data['id'] ?>">
                 <button class="btn width-full">Modifier</button>
             </a>
         </td>
@@ -27,7 +27,7 @@ function generateHeadList($isAdmin = false) {
     ?>
     <table class="tbl2">
         <tr>
-            <th></th>
+            <th style="width: 1px"></th>
             <th>Prénom</th>
             <th>Nom</th>
             <th>Age</th>
@@ -42,7 +42,9 @@ function generateHeadList($isAdmin = false) {
         $i = 0;
         $entries = EntryModel::get();
         while ($data = $entries->fetch()) {
+            echo '<tr>';
             generateHeadListEntry($data, $isAdmin);
+            echo '</tr>';
             $i++;
         }
 
