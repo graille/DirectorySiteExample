@@ -1,7 +1,6 @@
 <?php
 
 function generateBox($data = []) {
-    ob_start();
     ?>
     <div class="head-box">
         <div class="box-header">
@@ -13,7 +12,8 @@ function generateBox($data = []) {
                 </div>
             </div>
             <div class="picture">
-                <img src="https://specials-images.forbesimg.com/imageserve/59d552c74bbe6f37dd9fff97/416x416.jpg?background=000000&cropX1=0&cropX2=2259&cropY1=103&cropY2=2362" alt="Profile image"/>
+                <img src="https://specials-images.forbesimg.com/imageserve/59d552c74bbe6f37dd9fff97/416x416.jpg?background=000000&cropX1=0&cropX2=2259&cropY1=103&cropY2=2362"
+                     alt="Profile image"/>
             </div>
         </div>
 
@@ -50,8 +50,33 @@ function generateBox($data = []) {
         </div>
     </div>
 
-<?php
-    return ob_get_clean();
+    <?php
+}
+
+function generateBoxList($isAdmin = false) {
+    echo '<table class="width-full">';
+    $i = 0;
+    $entries = EntryModel::get();
+    while ($data = $entries->fetch()) {
+        if ($i % 3 === 0 && $i > 0)
+            echo '</tr>';
+
+        if ($i % 3 === 0)
+            echo '<tr>';
+
+
+        echo '<td>' . generateBox($data) . '</td>';
+
+        if ($i === 8)
+            echo '</tr>';
+
+        $i++;
+    }
+
+    echo '</table>';
+
+    if ($i === 0)
+        echo '<h2>Rien à afficher :\'(</h2>';
 }
 
 ?>

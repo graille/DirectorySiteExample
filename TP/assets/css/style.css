@@ -11,6 +11,9 @@ body {
     overflow: auto;
 }
 
+div, input, section, header, footer {
+    box-sizing: border-box;
+}
 
 .h-line {
     width: 100%;
@@ -54,12 +57,15 @@ body {
 }
 
 .section-body {
+    position: relative;
     width: 85%;
     background-color: white;
     margin:auto;
     padding: 30px;
     margin-top: 20px;
+    box-sizing: border-box;
 }
+
 
 
 table.tbl, table.tbl2 {
@@ -110,7 +116,7 @@ h2 {
 }
 
 table.tbl2 td:hover {
-    background-color: cornflowerblue;
+    background-color: lightblue;
     color:white;
 }
 table.tbl2 td:hover h2 {

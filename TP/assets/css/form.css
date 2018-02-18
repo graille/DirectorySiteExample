@@ -19,7 +19,7 @@
 .form-control:hover::placeholder {
     color: white;
 }
-
+/*
 input[type=text].form-control,
 input[type=number].form-control,
 input[type=date].form-control,
@@ -27,15 +27,27 @@ input[type=email].form-control,
 input[type=file].form-control {
     width: calc(100% - 60px);
 }
-
+*/
 .btn {
     width: 50%;
     padding: 20px;
     background-color: cornflowerblue;
-    border: none;
+    border: 1px solid cornflowerblue;
+
     color: white;
 
-    transition: all 0.4s ease;
+    transition: all 0.2s ease;
+}
+.btn-reset {
+    background-color: orangered;
+    border: 1px solid orangered;
+    color: white;
+}
+
+.btn-white {
+    background-color: white;
+    border: 1px solid cornflowerblue;
+    color: #333333;
 }
 
 .btn:hover {
@@ -47,10 +59,15 @@ input[type=file].form-control {
 
 fieldset {
     margin-bottom: 20px;
+    border: 3px solid cornflowerblue;
     border-top: 0;
+    transition: all 1s ease;
 }
 
 fieldset legend {
-    font-size: 20px;
+    font-size: 25px;
     font-weight: bold;
+    background-color: white;
+    width: 100%;
+    text-align: right;
 }

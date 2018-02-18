@@ -1,3 +1,4 @@
+<?php $startTime = microtime(true); ?>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -17,7 +18,6 @@
     <img src="./assets/images/icone_annuaire.png" alt="Annuaire" class="logo"/>
     <div class="h-line"></div>
     <ul>
-        <li><a href="?page=homepage">Accueil</a></li>
         <li><a href="?page=directory">Annuaire</a></li>
         <li><a href="?page=stats">Statistiques</a></li>
     </ul>
@@ -25,7 +25,6 @@
     <div class="h-line"></div>
     <ul>
         <li style="
-            background: url('assets/images/warning.png');
             text-shadow: 2px 0 0 #333, -2px 0 0 #333, 0 2px 0 #333, 0 -2px 0 #333, 1px 1px #333, -1px -1px 0 #333, 1px -1px 0 #333, -1px 1px 0 #333;">
             <a href="?page=admin.homepage">Administration</a>
         </li>
@@ -48,7 +47,12 @@
             $section = 'user';
         }
 
-        require "pages/{$section}/{$page}.php";
+        if(file_exists("pages/{$section}/{$page}.php")) {
+            require "pages/{$section}/{$page}.php";
+            StatsController::addVisit($section . '.' . $page, microtime(true) - $startTime);
+        }
+        else
+            echo "<h2 style='background-color: orangered; border-radius: 0'>ERREUR 404<br />La page demandée n'existe pas :/</h2>"
     ?>
 </section>
 

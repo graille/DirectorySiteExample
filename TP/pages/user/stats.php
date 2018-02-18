@@ -13,6 +13,13 @@
             </td>
         </tr>
         <tr>
+            <td colspan="2">
+                <h2>Temps moyens d'accès aux pages (en ms)</h2>
+
+                <canvas id="page-time-graph"></canvas>
+            </td>
+        </tr>
+        <tr>
             <td>
                 <h2>Nombre de personnes dans l'annuaire</h2>
 
@@ -40,6 +47,7 @@
     // get doughnut chart canvas
     var genderGraph = document.getElementById("gender-graph").getContext("2d");
     var categoriesGraph = document.getElementById("categories-graph").getContext("2d");
+    var pageTimeGraph = document.getElementById("page-time-graph").getContext("2d");
     var chartOptions = {
         responsive: true,
         legend: {
@@ -54,6 +62,7 @@
     <?php
         $categoriesRepartition = StatsController::getCategoriesRepartition();
         $genderRepartition = StatsController::getGenderRepartition();
+        $pageTimeRepartition = StatsController::getPageStats();
     ?>
 
     new Chart(categoriesGraph, {
@@ -84,6 +93,22 @@
                 label: 'Dataset 1'
             }],
             labels: <?= DataManipulator::transformArrayToString($genderRepartition[0]) ?>
+        },
+        options: chartOptions
+    });
+
+    new Chart(pageTimeGraph, {
+        type: 'bar',
+        data: {
+            datasets: [{
+                data: <?= DataManipulator::transformArrayToString($pageTimeRepartition[1]) ?>,
+                backgroundColor: [
+                    '#6496E9',
+                    'orange'
+                ],
+                label: 'Dataset 1'
+            }],
+            labels: <?= DataManipulator::transformArrayToString($pageTimeRepartition[0]) ?>
         },
         options: chartOptions
     });

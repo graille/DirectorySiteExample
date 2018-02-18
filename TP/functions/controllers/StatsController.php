@@ -12,11 +12,22 @@ class StatsController {
     /**
      * Add a visit
      */
-    static public function addVisit() {
-        PDOManipulator::create()->query("
-              INSERT INTO visit 
-              VALUES ('', {time()}, '{$_SERVER['REMOTE_ADDR']}')
-        ");
+    static public function addVisit($page, $pageDisplayTime) {
+        PDOManipulator::create()->prepare("
+              INSERT INTO visits 
+              (id, ip, page, page_display_time)
+              VALUES (
+                '',
+                :ip,
+                :page,
+                :page_display_time
+              )
+        ")
+        ->execute([
+            'ip' => $_SERVER['REMOTE_ADDR'],
+            'page' => $page,
+            'page_display_time' => $pageDisplayTime
+        ]);
     }
 
     /**
@@ -48,17 +59,19 @@ class StatsController {
     }
 
     static public function getPageStats() {
-        // TODO
-        return [
-            [
-                'user.homepage',
-                'user.directory...'
-            ],
-            [
-                1.151454,
-                1.1471
-            ]
-        ];
+        $results = PDOManipulator::create()->query(
+            "SELECT page, AVG(page_display_time) * 1000 AS avg_display_time FROM visits GROUP BY page"
+        )->fetchAll();
+
+        $pages = [];
+        $times = [];
+
+        foreach ($results as $result) {
+            $pages[] = $result["page"];
+            $times[] = $result["avg_display_time"];
+        }
+
+        return [$pages, $times];
     }
 
     /**
