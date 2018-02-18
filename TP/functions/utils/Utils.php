@@ -16,4 +16,15 @@ class Utils {
 
         return $diff->y;
     }
+
+    /**
+     * Check if an id is valid
+     * @param $id
+     *
+     * @throws Exception
+     */
+    static public function checkId($id) {
+        if (!is_int($id))
+            throw new Exception("Un id doit être un entier, ".gettype($id)." ({$id}) given");
+    }
 }

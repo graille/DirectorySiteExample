@@ -58,6 +58,10 @@
     font-size: 10px;
 }
 
+table.tbl2 td:hover .head-box {
+    color:#333;
+}
+
 .box-header .picture {
     position: absolute;
     top: 0;

@@ -119,6 +119,8 @@ table.tbl2 td:hover {
     background-color: lightblue;
     color:white;
 }
+
+
 table.tbl2 td:hover h2 {
     background-color: white;
     border-radius: 50px 5px 10px 15px;

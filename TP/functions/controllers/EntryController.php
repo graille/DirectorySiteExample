@@ -21,14 +21,29 @@ class EntryController {
     }
 
     /**
+     * @param int $categoryId
+     *
+     * @return PDOStatement
+     * @throws Exception
+     */
+    static public function getByCategory($categoryId) {
+        Utils::checkId($categoryId);
+
+        $query = self::getBaseQuery();
+
+        $query .= " WHERE e.category_id = {$categoryId}";
+        return PDOManipulator::create()
+            ->query($query);
+    }
+
+    /**
      * @param $id
      *
      * @return PDOStatement
      * @throws Exception
      */
     static public function getOne($id) {
-        if (!is_int($id))
-            throw new Exception("Un id doit être un entier");
+        Utils::checkId($id);
 
         $query = self::getBaseQuery();
         $query .= " WHERE e.id = {$id};";
@@ -60,7 +75,7 @@ class EntryController {
             throw new Exception("L'email {$email} est invalide");
 
         foreach (['website', 'twitter', 'facebook', 'linkedin'] as $item)
-            if (!filter_var($url = $data[$item], FILTER_VALIDATE_URL))
+            if (!empty($data[$item]) && !filter_var($url = $data[$item], FILTER_VALIDATE_URL))
                 throw new Exception("L'url {$url} associée au label {$item} est invalide");
 
         if (!file_exists($path = $data['image_path']) && !is_null($path)) // L'image n'est pas obligatoire
@@ -85,14 +100,14 @@ class EntryController {
         $result['email'] = htmlspecialchars($data['email']);
         $result['gender'] = htmlspecialchars($data['gender']);
 
-        $result['image_path'] = htmlspecialchars($data['image_path']);
+        $result['image_path'] = (!empty($data['image_path'])) ? htmlspecialchars($data['image_path']) : null;
 
         $result["category_id"] = intval($data["category_id"]);
 
-        $result['website'] = htmlspecialchars($data['website']);
-        $result['twitter'] = htmlspecialchars($data['twitter']);
-        $result['facebook'] = htmlspecialchars($data['facebook']);
-        $result['linkedin'] = htmlspecialchars($data['linkedin']);
+        $result['website'] = (!empty($data['website'])) ? htmlspecialchars($data['website']) : null;
+        $result['twitter'] = (!empty($data['twitter'])) ? htmlspecialchars($data['twitter']) : null;
+        $result['facebook'] = (!empty($data['facebook'])) ? htmlspecialchars($data['facebook']) : null;
+        $result['linkedin'] = (!empty($data['linkedin'])) ? htmlspecialchars($data['linkedin']) : null;
 
         return $result;
     }
@@ -152,8 +167,8 @@ class EntryController {
      * @throws Exception
      */
     static public function updateEntry($id, $data) {
-        self::validateData($data);
-        self::escapeData($data);
+        $data = self::validateData($data);
+        $data = self::escapeData($data);
 
         $query = "UPDATE entries
                 SET 
@@ -175,9 +190,33 @@ class EntryController {
         $pdo = PDOManipulator::create()
             ->prepare($query);
 
-        $pdo->bindParam('id', $id);
+        $data['id'] = $id;
         $pdo->execute($data);
 
         return $id;
+    }
+
+    /**
+     * @param $id
+     *
+     * @throws Exception
+     */
+    static public function delete($id) {
+        Utils::checkId($id);
+
+        // Load entry
+        $data = self::getOne($id)->fetch();
+        if(empty($data))
+            throw new Exception("Aucune entrée avec l'id {$id} n'a pu être trouvée");
+
+        // Delete image
+        if(!is_null($data['image_path']))
+            unlink($data['image_path']);
+
+        PDOManipulator::create()->prepare("DELETE FROM entries WHERE id = :id")->execute(['id' => $id]);
+
+        // Check if we have to delete the category
+        if(self::getByCategory(intval($data['category_id']))->rowCount() === 0)
+            CategoryController::delete(intval($data['category_id']));
     }
 }

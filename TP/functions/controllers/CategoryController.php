@@ -45,8 +45,7 @@ class CategoryController {
      * @throws Exception
      */
     static public function getOne($id) {
-        if(!is_int($id))
-            throw new Exception("Un id doit être un entier");
+        Utils::checkId($id);
 
         $query = self::getBaseQuery();
         $query.= " WHERE id = {$id}";
@@ -64,5 +63,17 @@ class CategoryController {
 
         $pdo->bindParam('name', $name);
         $pdo->execute();
+    }
+
+    /**
+     * Delete a category
+     * @param $id
+     *
+     * @throws Exception
+     */
+    static public function delete($id) {
+        Utils::checkId($id);
+
+        PDOManipulator::create()->prepare("DELETE FROM categories WHERE id = :id")->execute(['id' => $id]);
     }
 }

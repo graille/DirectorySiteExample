@@ -6,12 +6,12 @@
             <td>
                 <h2>Nombre de personnes dans l'annuaire</h2>
 
-                <?= EntryController::get()->rowCount() ?>
+                <h3><?= EntryController::get()->rowCount() ?></h3>
             </td>
             <td>
                 <h2>Nombre de consultations de l'annuaire</h2>
 
-                <?= StatsController::getVisit()->rowCount() ?>
+                <h3><?= StatsController::getVisit()->rowCount() ?></h3>
             </td>
         </tr>
         <tr>
@@ -37,7 +37,11 @@
 
                 <?php generateBox(EntryController::getLast()->fetch()); ?>
             </td>
-            <td></td>
+            <td>
+                <h2>Page les plus visitées</h2>
+
+                <canvas id="page-visits-graph"></canvas>
+            </td>
         </tr>
     </table>
 </div>
@@ -48,6 +52,8 @@
     var genderGraph = document.getElementById("gender-graph").getContext("2d");
     var categoriesGraph = document.getElementById("categories-graph").getContext("2d");
     var pageTimeGraph = document.getElementById("page-time-graph").getContext("2d");
+    var pageVisitsGraph = document.getElementById("page-visits-graph").getContext("2d");
+
     var chartOptions = {
         responsive: true,
         legend: {
@@ -59,10 +65,20 @@
         }
     };
 
+    var backgrounds = [
+        '#6496E9',
+        'orange',
+        'blue',
+        'green',
+        'red',
+        'black'
+    ];
+
     <?php
         $categoriesRepartition = StatsController::getCategoriesRepartition();
         $genderRepartition = StatsController::getGenderRepartition();
-        $pageTimeRepartition = StatsController::getPageStats();
+        $pageTimeRepartition = StatsController::getPageDisplayTimeStats();
+        $pageVisitRepartition = StatsController::getPageVisitsStats();
     ?>
 
     new Chart(categoriesGraph, {
@@ -70,11 +86,8 @@
         data: {
             datasets: [{
                 data: <?= DataManipulator::transformArrayToString($categoriesRepartition[1]) ?>,
-                backgroundColor: [
-                    '#6496E9',
-                    'orange'
-                ],
-                label: 'Dataset 1'
+                backgroundColor: backgrounds,
+                label: 'Répartition par catégories'
             }],
             labels: <?= DataManipulator::transformArrayToString($categoriesRepartition[0]) ?>
         },
@@ -86,11 +99,8 @@
         data: {
             datasets: [{
                 data: <?= DataManipulator::transformArrayToString($genderRepartition[1]) ?>,
-                backgroundColor: [
-                    '#6496E9',
-                    'orange'
-                ],
-                label: 'Dataset 1'
+                backgroundColor: backgrounds,
+                label: 'Repartition par sexe'
             }],
             labels: <?= DataManipulator::transformArrayToString($genderRepartition[0]) ?>
         },
@@ -102,14 +112,27 @@
         data: {
             datasets: [{
                 data: <?= DataManipulator::transformArrayToString($pageTimeRepartition[1]) ?>,
-                backgroundColor: [
-                    '#6496E9',
-                    'orange'
-                ],
-                label: 'Dataset 1'
+                backgroundColor: backgrounds,
+                label: "Temps d'accès"
             }],
             labels: <?= DataManipulator::transformArrayToString($pageTimeRepartition[0]) ?>
         },
         options: chartOptions
     });
+
+
+    new Chart(pageVisitsGraph, {
+        type: 'horizontalBar',
+        data: {
+            datasets: [{
+                data: <?= DataManipulator::transformArrayToString($pageVisitRepartition[1]) ?>,
+                backgroundColor: backgrounds,
+                label: 'Visites'
+            }],
+            labels: <?= DataManipulator::transformArrayToString($pageVisitRepartition[0]) ?>
+        },
+        options: chartOptions
+    });
+
+
 </script>

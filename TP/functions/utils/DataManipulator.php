@@ -16,7 +16,8 @@ class DataManipulator {
                 $result .= "\"{$item}\",";
 
         // Remove last ","
-        $result = substr($result, 0, strlen($result) - 1);
+        if($result !== '[')
+            $result = substr($result, 0, strlen($result) - 1);
 
         $result .= "]";
 

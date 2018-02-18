@@ -1,22 +1,24 @@
 <?php
 try {
+    // Variable globales
+    $validImageExtensions = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'bmp', 'ico', 'tif'];
+    $completed = false;
+
+    // Variables pour l'édition
+    $editEntryMode = false;
+    $editEntryData = null;
+
     /**
      * Si on veut editer une entrée existante, on la charge
      */
-    $loadedEntryData = null;
-    $validImageExtensions = ['jpg', 'jpeg', 'gif', 'png', 'svg', 'bmp', 'ico', 'tif'];
-    $completed = false;
-    $editMode = false;
     if (!empty($_GET['id'])) {
         $loadedEntry = EntryController::getOne(intval($_GET['id']));
 
         if ($loadedEntry->rowCount() > 0) {
-            $loadedEntryData = $loadedEntry->fetch();
-            $editMode = true;
+            $editEntryData = $loadedEntry->fetch();
+            $editEntryMode = true;
         }
     }
-
-
 
     /**
      * Si le formulaire a été posté, on le traite
@@ -78,30 +80,34 @@ try {
         }
 
         // On sauvegarde les résultats
-        if(!$editMode)
+        if(!$editEntryMode)
             $entryId = EntryController::addEntry($data);
         else
             $entryId = EntryController::updateEntry(intval($_GET['id']), $data);
 
-        $completed = true;
-
         // On passe en mode edition sur la nouvelle entrée
-        $loadedEntryData = EntryController::getOne($entryId)->fetch();
+        $editEntryData = EntryController::getOne(intval($entryId))->fetch();
+        $editEntryMode = true;
+
+        $completed = true;
     }
 } catch (Exception $e) {
     // En cas d'erreur, on redirige tout vers la variable {$error}
     $error = $e->getMessage();
+    $editEntryData = $data;
 }
 
 function getValue($parameter) {
-    global $loadedEntryData;
-    if (isset($loadedEntryData) && !empty($loadedEntryData) && !is_null($loadedEntryData))
-        if (array_key_exists($parameter, $loadedEntryData))
-            return $loadedEntryData[$parameter];
+    global $editEntryData;
+    if (isset($editEntryData) && !empty($editEntryData) && !is_null($editEntryData))
+        if (array_key_exists($parameter, $editEntryData))
+            return $editEntryData[$parameter];
 
     return null;
 }
 
+$actionPath = "?page=admin.manage";
+if($editEntryMode) $actionPath .= "&&id={$editEntryData['id']}";
 ?>
 
 <div class="section-body">
@@ -111,17 +117,17 @@ function getValue($parameter) {
         </div>
     <?php } ?>
 
-    <?php if(isset($completed) && $completed) { ?>
+    <?php if(isset($completed) && $completed === true) { ?>
         <div class="width-full" style="background-color: green; color: white; padding: 20px">
-            <?php if($editMode) { ?>
+            <?php if($editEntryMode && isset($_GET['id'])) { ?>
                 Modification de <?= getValue('firstname').' '.getValue('lastname') ?> efféctuée
             <?php } else { ?>
-                Ajout de <?= getValue('firstname').' '.getValue('lastname') ?> efféctuée
+                Ajout de <?= getValue('firstname').' '.getValue('lastname') ?> efféctué
             <?php } ?>
         </div>
     <?php } ?>
 
-    <?php if(!$editMode) { ?>
+    <?php if(!$editEntryMode) { ?>
         <h2>Ajout d'une entrée dans l'annuaire</h2>
     <?php } else { ?>
         <a href="?page=admin.manage">
@@ -131,7 +137,7 @@ function getValue($parameter) {
         <h2 style="background-color: orangered">Modification d'une entrée dans l'annuaire</h2>
     <?php } ?>
 
-    <form action="" method="post" enctype="multipart/form-data">
+    <form action="<?= $actionPath ?>" method="post" enctype="multipart/form-data">
         <fieldset>
             <legend>Informations personnelles</legend>
             <input type="text" name="firstname" value="<?= getValue('firstname') ?>" placeholder="Prénom" class="form-control"/>
@@ -150,14 +156,14 @@ function getValue($parameter) {
 
             <table class="width-full">
                 <tr>
-                    <td style="width: <?= (!is_null(getValue('image_path')) && $editMode) ? '70%': '100%' ?>">
+                    <td style="width: <?= (!is_null(getValue('image_path')) && $editEntryMode) ? '70%': '100%' ?>">
                         <input type="file" class="form-control" name="image"/>
                     </td>
-                    <?php if(!is_null(getValue('image_path')) && $editMode) { ?>
+                    <?php if(!is_null(getValue('image_path')) && $editEntryMode) { ?>
                     <td style="text-align: center">
                         <img src="<?= getValue('image_path') ?>"
                              alt="<?= getValue('firstname').getValue('lastname') ?>"
-                             width="80%"
+                             style="width: 80%; border-radius: 10px"
                         />
                     </td>
                     <?php } ?>
