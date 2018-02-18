@@ -65,7 +65,7 @@ function generateBox($data = []) {
 
         <?php
     } else
-        echo '<h3>Aucune données à afficher</h3>';
+        echo '<h3>Aucune donnée à afficher</h3>';
 }
 
 function generateBoxList($nbPerRow = 3) {
