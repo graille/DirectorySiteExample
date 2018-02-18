@@ -1,7 +1,7 @@
 <?php
 
 function generateBox($data = []) {
-    if(!empty($data)) {
+    if (!empty($data)) {
         ?>
         <div class="head-box">
             <div class="box-header">
@@ -25,15 +25,15 @@ function generateBox($data = []) {
                     </tr>
                     <tr>
                         <td>Page perso</td>
-                        <td><a href="//tesla.com"><?= $data['website'] ?></a></td>
+                        <td><a href="<?= $data['website'] ?>"><?= $data['website'] ?></a></td>
                     </tr>
                     <tr>
                         <td>Age</td>
-                        <td><a href="//tesla.com"><?= Utils::calculateAgeFromTimestamp($data['birthday']) ?></a></td>
+                        <td><?= Utils::calculateAgeFromTimestamp($data['birthday']) ?></td>
                     </tr>
                     <tr>
                         <td>Date d'ajout</td>
-                        <td><a href="//tesla.com"><?= $data['created'] ?></a></td>
+                        <td><?= $data['created'] ?></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -58,8 +58,7 @@ function generateBox($data = []) {
         </div>
 
         <?php
-    }
-    else
+    } else
         echo '<h3>Aucune données à afficher</h3>';
 }
 
@@ -71,7 +70,7 @@ function generateBoxList($nbPerRow = 3) {
         if ($i % $nbPerRow === 0 && $i > 0) echo '</tr>';
         if ($i % $nbPerRow === 0) echo '<tr>';
 
-        echo '<td style="width: '.(100/$nbPerRow).'%">';
+        echo '<td style="width: ' . (100 / $nbPerRow) . '%">';
         generateBox($data);
         echo '</td>';
 

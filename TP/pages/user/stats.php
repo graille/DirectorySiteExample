@@ -38,9 +38,9 @@
                 <?php generateBox(EntryController::getLast()->fetch()); ?>
             </td>
             <td>
-                <h2>Page les plus visitées</h2>
+                <h2>Pages les plus visitées</h2>
 
-                <canvas id="page-visits-graph"></canvas>
+                <canvas id="page-visits-graph" height="300px"></canvas>
             </td>
         </tr>
     </table>
