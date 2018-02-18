@@ -109,12 +109,4 @@ class StatsController {
 
         return [$pages, $nb];
     }
-
-    /**
-     * @return int The number of people in directory
-     */
-    static public function getNumber() {
-        // TODO
-        return 500;
-    }
 }
