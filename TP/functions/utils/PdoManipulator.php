@@ -1,5 +1,10 @@
 <?php
+
 class PDOManipulator {
+    /**
+     * Create a PDO instance
+     * @return null|PDO
+     */
     static function create() {
         try {
             $pdo = new PDO("mysql:
@@ -9,11 +14,10 @@ class PDOManipulator {
                 PDO_USERNAME,
                 PDO_PASSWORD);
 
-            $pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
             return $pdo;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             echo "<h2>Aucune connexion à la base de données n'a pu être établie</h2>";
             return null;
         }

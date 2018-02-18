@@ -2,21 +2,21 @@
 
 class DataManipulator {
     /**
-     * @param      $array
+     * @param  array $array The array we want to transform
      *
-     * @return bool|string
+     * @return bool|string The array as a string
      */
     static public function transformArrayToString($array) {
         $result = '[';
 
         foreach ($array as $key => $item)
-            if(is_int($item))
+            if (is_int($item))
                 $result .= "{$item},";
             else
                 $result .= "\"{$item}\",";
 
         // Remove last ","
-        if($result !== '[')
+        if ($result !== '[')
             $result = substr($result, 0, strlen($result) - 1);
 
         $result .= "]";
