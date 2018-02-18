@@ -23,7 +23,7 @@ class EntryModel {
     /**
      * @param $id
      *
-     * @return bool
+     * @return PDOStatement
      * @throws Exception
      */
     static public function getOne($id) {
@@ -31,11 +31,10 @@ class EntryModel {
             throw new Exception("Un id doit être un entier");
 
         $query = self::getBaseQuery();
-        $query .= "WHERE e.id = {$id}";
+        $query .= " WHERE e.id = {$id};";
 
         return PDOManipulator::create()
-            ->query($query)
-            ->bindParam('id', $id);
+            ->query($query);
     }
 
     /**
@@ -133,7 +132,7 @@ class EntryModel {
             :twitter,
             :facebook,
             :linkedin
-        )";
+        );";
 
         PDOManipulator::create()
             ->prepare($query)
@@ -165,7 +164,7 @@ class EntryModel {
                     linkedin = :linkedin,
                     facebook = :facebook,
                     twitter = :twitter
-                WHERE id = :id";
+                WHERE id = :id;";
 
         $pdo = PDOManipulator::create()
             ->prepare($query);

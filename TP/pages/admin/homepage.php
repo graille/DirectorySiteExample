@@ -3,10 +3,9 @@
 
 
 <div class="section-body">
-    <a href="?page=admin.add">
+    <a href="?page=admin.manage">
         <button class="btn width-full">Ajouter une entrée</button>
     </a>
-
 
     <?php
         generateHeadList(true);

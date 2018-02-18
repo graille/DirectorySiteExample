@@ -1,5 +1,13 @@
 <?php
-    $validExtensions = array( 'jpg' , 'jpeg' , 'gif' , 'png' );
+    // If we want to edit an existing entry
+    if(!empty($_GET['id'])) {
+        $editEntry = EntryModel::getOne(intval($_GET['id']));
+
+        if($editEntry->rowCount() > 0)
+            $loadedEntry = $editEntry->fetch();
+    }
+
+    $validExtensions = array('jpg', 'jpeg', 'gif', 'png');
     if(array_key_exists('form_token', $_POST)) {
         try {
             $data = $_POST;
@@ -59,8 +67,14 @@
         }
     }
 
-
     function getValue($parameter) {
+        global $loadedEntry;
+        if(isset($loadedEntry) && !empty($loadedEntry)) {
+
+            if (array_key_exists($parameter, $loadedEntry))
+                return $loadedEntry[$parameter];
+        }
+
         return null;
     }
 ?>
@@ -79,7 +93,7 @@
             <legend>Informations personnelles</legend>
             <input type="text" name="firstname" value="<?= getValue('firstname') ?>" placeholder="Prénom" class="form-control"/>
             <input type="text" name="lastname" value="<?= getValue('lastname') ?>" placeholder="Nom" class="form-control"/>
-            <input type="date" name="birthday" value="<?= getValue('birthday') ?>" placeholder="Date de naissance" class="form-control"/>
+            <input type="date" name="birthday" value="<?= date('Y-m-d', getValue('birthday')) ?>" placeholder="Date de naissance" class="form-control"/>
             <input type="email" name="email" value="<?= getValue('email') ?>" placeholder="Email" class="form-control"/>
 
             <select class="form-control" name="gender" title="Choix du sexe">

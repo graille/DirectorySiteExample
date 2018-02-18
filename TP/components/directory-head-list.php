@@ -4,12 +4,12 @@ function generateHeadListEntry($data = [], $isAdmin = false) {
     <td><img src="<?= $data['image_path'] ?>" style="max-height: 200px;"/></td>
     <td><?= $data['firstname'] ?></td>
     <td><?= $data['lastname'] ?></td>
-    <td><?= date("d-m-Y", $data['birthdate']) ?></td>
+    <td><?= Utils::calculateAgeFromTimestamp($data['birthday']) ?></td>
     <td><?= $data['category_name'] ?></td>
 
     <?php if ($isAdmin) { ?>
         <td>
-            <a href="?page=admin.manage&&action=delete&&id=<?= $data['id'] ?>">
+            <a href="?page=admin.homepage&&action=delete&&id=<?= $data['id'] ?>">
                 <button class="btn width-full">Supprimer</button>
             </a>
         </td>
