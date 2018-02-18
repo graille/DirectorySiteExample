@@ -3,6 +3,18 @@
 <div class="section-body">
     <table class="tbl2 width-full">
         <tr>
+            <td>
+                <h2>Nombre de personnes dans l'annuaire</h2>
+
+                <?= EntryModel::get()->rowCount() ?>
+            </td>
+            <td>
+                <h2>Nombre de consultations de l'annuaire</h2>
+
+                <?= StatsController::getVisit()->rowCount() ?>
+            </td>
+        </tr>
+        <tr>
             <td style="width: 50%">
                 <h2>Répartition par catégories</h2>
                 <canvas id="categories-graph"></canvas>
@@ -21,21 +33,9 @@
         </tr>
         <tr>
             <td>
-                <h2>Nombre de personnes dans l'annuaire</h2>
-
-                <?= StatsController::getNumber() ?>
-            </td>
-            <td>
-                <h2>Nombre de consultations de l'annuaire</h2>
-
-                <?= StatsController::getVisit() ?>
-            </td>
-        </tr>
-        <tr>
-            <td>
                 <h2>Dernière personne ajoutée</h2>
 
-                <?= generateBox(); ?>
+                <?php generateBox(EntryModel::getLast()->fetch()); ?>
             </td>
             <td></td>
         </tr>

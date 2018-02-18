@@ -37,6 +37,15 @@ class EntryModel {
             ->query($query);
     }
 
+
+    static public function getLast() {
+        $query = self::getBaseQuery();
+        $query .= " ORDER BY e.created DESC LIMIT 1";
+
+        return PDOManipulator::create()
+            ->query($query);
+    }
+
     /**
      * @param array $data
      *

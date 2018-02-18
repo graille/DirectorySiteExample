@@ -2,11 +2,10 @@
 
 class StatsController {
     /**
-     * @return int The number of visit on the directory
+     * @return PDOStatement The visits on the directory
      */
     static public function getVisit() {
-        // TODO
-        return 500;
+        return PDOManipulator::create()->query("SELECT * FROM visits;");
     }
 
     /**
