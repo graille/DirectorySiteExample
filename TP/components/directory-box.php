@@ -38,18 +38,24 @@ function generateBox($data = []) {
                     <tr>
                         <td colspan="2">
                             <div class="icon-container">
-                                <a href="<?= $data['twitter'] ?>">
-                                    <img alt="Twitter"
-                                         src="assets/images/logo/twitter.png"/>
-                                </a>
-                                <a href="<?= $data['facebook'] ?>">
-                                    <img alt="Facebook"
-                                         src="assets/images/logo/facebook.png"/>
-                                </a>
-                                <a href="<?= $data['linkedin'] ?>">
-                                    <img alt="LinkedIn"
-                                         src="assets/images/logo/linkedin.png"/>
-                                </a>
+                                <?php if (!empty($data['twitter'])) { ?>
+                                    <a href="<?= $data['twitter'] ?>">
+                                        <img alt="Twitter"
+                                             src="assets/images/logo/twitter.png"/>
+                                    </a>
+                                <?php }
+                                if (!empty($data['facebook'])) { ?>
+                                    <a href="<?= $data['facebook'] ?>">
+                                        <img alt="Facebook"
+                                             src="assets/images/logo/facebook.png"/>
+                                    </a>
+                                <?php }
+                                if (!empty($data['linkedin'])) { ?>
+                                    <a href="<?= $data['linkedin'] ?>">
+                                        <img alt="LinkedIn"
+                                             src="assets/images/logo/linkedin.png"/>
+                                    </a>
+                                <?php } ?>
                             </div>
                         </td>
                     </tr>

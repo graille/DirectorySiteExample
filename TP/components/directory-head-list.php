@@ -5,6 +5,7 @@ function generateHeadListEntry($data = [], $isAdmin = false) {
     <td><?= $data['firstname'] ?></td>
     <td><?= $data['lastname'] ?></td>
     <td><?= Utils::calculateAgeFromTimestamp($data['birthday']) ?> ans</td>
+    <td><?= $data['created'] ?></td>
     <td><?= $data['category_name'] ?></td>
 
     <?php if ($isAdmin) { ?>
@@ -31,6 +32,7 @@ function generateHeadList($isAdmin = false) {
             <th>Prénom</th>
             <th>Nom</th>
             <th>Age</th>
+            <th>Date d'ajout</th>
             <th>Catégorie</th>
 
             <?php if ($isAdmin) { ?>

@@ -81,6 +81,7 @@ table.tbl2 td:hover .head-box {
     display: inline-block;
     line-height: 48px;
     width: 100%;
+    margin-top: 20px;
 }
 
 .icon-container a {
