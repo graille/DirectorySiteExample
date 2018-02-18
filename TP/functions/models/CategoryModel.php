@@ -27,9 +27,10 @@ class CategoryModel {
      */
     static public function getOneByName($name) {
         $name = htmlspecialchars($name);
+        $name = mb_strtolower($name);
 
         $query = self::getBaseQuery();
-        $query.= " WHERE name = '{$name}'";
+        $query.= " WHERE LOWER(name) = '{$name}'";
 
         return PDOManipulator::create()
             ->query($query);
