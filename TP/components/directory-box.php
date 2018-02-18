@@ -6,14 +6,13 @@ function generateBox($data = []) {
         <div class="box-header">
             <div class="background"></div>
             <div class="title">
-                Elon MUSK
+                <?= ucfirst($data['firstname']).' '.strtoupper($data['lastname']) ?>
                 <div class="subtitle">
-                    PDG de SpaceX, 46 ans
+                    <?= $data['category_name'] ?>
                 </div>
             </div>
             <div class="picture">
-                <img src="https://specials-images.forbesimg.com/imageserve/59d552c74bbe6f37dd9fff97/416x416.jpg?background=000000&cropX1=0&cropX2=2259&cropY1=103&cropY2=2362"
-                     alt="Profile image"/>
+                <img src="<?= $data['image_path'] ?>" alt="<?= $data["firstname"] ?> profile picture" />
             </div>
         </div>
 
@@ -21,29 +20,36 @@ function generateBox($data = []) {
             <table class="tbl">
                 <tr>
                     <td>Courriel</td>
-                    <td><a href="mailto:elon.musk@tesla.com">elon.musk@tesla.com</a></td>
+                    <td><a href="mailto:<?= $data['email'] ?>"><?= $data['email'] ?></a></td>
                 </tr>
                 <tr>
                     <td>Page perso</td>
-                    <td><a href="//tesla.com">Tesla Motors</a></td>
+                    <td><a href="//tesla.com"><?= $data['website'] ?></a></td>
+                </tr>
+                <tr>
+                    <td>Age</td>
+                    <td><a href="//tesla.com"><?= Utils::calculateAgeFromTimestamp($data['birthday']) ?></a></td>
+                </tr>
+                <tr>
+                    <td>Date d'ajout</td>
+                    <td><a href="//tesla.com"><?= $data['created'] ?></a></td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <div class="icon-container">
-                            <a href="https://twitter.com/elonmusk">
+                            <a href="<?= $data['twitter'] ?>">
                                 <img alt="Twitter"
-                                     src="https://upload.wikimedia.org/wikipedia/fr/thumb/c/c8/Twitter_Bird.svg/1259px-Twitter_Bird.svg.png"/>
+                                     src="assets/images/logo/twitter.png"/>
                             </a>
-                            <a href="https://www.facebook.com/Elon-Musk-19958149870/">
+                            <a href="<?= $data['facebook'] ?>">
                                 <img alt="Facebook"
-                                     src="https://vignette.wikia.nocookie.net/thelorde/images/9/9d/Facebook-logo-png-image-76118.png/revision/latest?cb=20170428142744"/>
+                                     src="assets/images/logo/facebook.png"/>
                             </a>
-                            <a href="https://www.linkedin.com/showcase/elon-musk-newslines/?originalSubdomain=fr">
+                            <a href="<?= $data['linkedin'] ?>">
                                 <img alt="LinkedIn"
-                                     src="https://cdn1.iconfinder.com/data/icons/logotypes/32/square-linkedin-512.png"/>
+                                     src="assets/images/logo/linkedin.png"/>
                             </a>
                         </div>
-
                     </td>
                 </tr>
             </table>
@@ -53,27 +59,21 @@ function generateBox($data = []) {
     <?php
 }
 
-function generateBoxList($isAdmin = false) {
+function generateBoxList($nbPerRow = 3) {
     echo '<table class="width-full">';
     $i = 0;
-    $entries = EntryModel::get();
+    $entries = EntryController::get();
     while ($data = $entries->fetch()) {
-        if ($i % 3 === 0 && $i > 0)
-            echo '</tr>';
+        if ($i % $nbPerRow === 0 && $i > 0) echo '</tr>';
+        if ($i % $nbPerRow === 0) echo '<tr>';
 
-        if ($i % 3 === 0)
-            echo '<tr>';
-
-
-        echo '<td>' . generateBox($data) . '</td>';
-
-        if ($i === 8)
-            echo '</tr>';
+        echo '<td style="width: '.(100/$nbPerRow).'%">';
+        generateBox($data);
+        echo '</td>';
 
         $i++;
     }
-
-    echo '</table>';
+    echo '</tr></table>';
 
     if ($i === 0)
         echo '<h2>Rien à afficher :\'(</h2>';

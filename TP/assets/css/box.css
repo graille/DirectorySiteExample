@@ -2,7 +2,7 @@
     transition: all 0.2s ease-in;
 
     padding:20px;
-    height: 400px;
+    min-height: 400px;
 }
 
 .box-header {
@@ -23,7 +23,7 @@
     height: 100%;
     transition: all 0.4s ease-out;
     background: url("../images/concert1.jpg");
-    background-position: center;
+    background-position: top;
     background-size: cover;
 }
 

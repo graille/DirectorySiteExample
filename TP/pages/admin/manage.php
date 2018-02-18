@@ -8,7 +8,7 @@ try {
     $completed = false;
     $editMode = false;
     if (!empty($_GET['id'])) {
-        $loadedEntry = EntryModel::getOne(intval($_GET['id']));
+        $loadedEntry = EntryController::getOne(intval($_GET['id']));
 
         if ($loadedEntry->rowCount() > 0) {
             $loadedEntryData = $loadedEntry->fetch();
@@ -65,11 +65,11 @@ try {
         // Manage category
         if (!empty($_POST['category_str'])) {
             // Check that the category does not exist
-            $finder = CategoryModel::getOneByName($_POST['category_str']);
+            $finder = CategoryController::getOneByName($_POST['category_str']);
             if ($finder->rowCount() === 0) {
                 $name = $_POST['category_str'];
-                CategoryModel::add($name);
-                $data['category_id'] = (CategoryModel::getOneByName($name)->fetch())['id'];
+                CategoryController::add($name);
+                $data['category_id'] = (CategoryController::getOneByName($name)->fetch())['id'];
             } else
                 $data['category_id'] = $finder->fetch()['id'];
         } else {
@@ -79,14 +79,14 @@ try {
 
         // On sauvegarde les résultats
         if(!$editMode)
-            $entryId = EntryModel::addEntry($data);
+            $entryId = EntryController::addEntry($data);
         else
-            $entryId = EntryModel::updateEntry(intval($_GET['id']), $data);
+            $entryId = EntryController::updateEntry(intval($_GET['id']), $data);
 
         $completed = true;
 
         // On passe en mode edition sur la nouvelle entrée
-        $loadedEntryData = EntryModel::getOne($entryId)->fetch();
+        $loadedEntryData = EntryController::getOne($entryId)->fetch();
     }
 } catch (Exception $e) {
     // En cas d'erreur, on redirige tout vers la variable {$error}
@@ -185,7 +185,7 @@ function getValue($parameter) {
                         <select class="form-control" name="category_id" title="Choix de la catégorie">
                             <option>Aucune</option>
                             <?php
-                            $categories = CategoryModel::get();
+                            $categories = CategoryController::get();
                             while ($data = $categories->fetch())
                                 echo "<option value='{$data['id']}' ".
                                     ((getValue('category_id') === $data['id']) ? 'selected' : '').

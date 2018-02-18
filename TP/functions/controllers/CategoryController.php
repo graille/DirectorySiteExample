@@ -1,6 +1,6 @@
 <?php
 
-class CategoryModel {
+class CategoryController {
     /**
      * @return string
      */

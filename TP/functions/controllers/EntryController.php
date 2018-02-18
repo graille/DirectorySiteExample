@@ -1,6 +1,6 @@
 <?php
 
-class EntryModel {
+class EntryController {
     /**
      * @return string
      */
@@ -27,7 +27,7 @@ class EntryModel {
      * @throws Exception
      */
     static public function getOne($id) {
-        if(!is_int($id))
+        if (!is_int($id))
             throw new Exception("Un id doit être un entier");
 
         $query = self::getBaseQuery();
@@ -61,12 +61,12 @@ class EntryModel {
 
         foreach (['website', 'twitter', 'facebook', 'linkedin'] as $item)
             if (!filter_var($url = $data[$item], FILTER_VALIDATE_URL))
-                throw new Exception("L'url {$url} associée au compte {$item} est invalide");
+                throw new Exception("L'url {$url} associée au label {$item} est invalide");
 
         if (!file_exists($path = $data['image_path']) && !is_null($path)) // L'image n'est pas obligatoire
             throw new Exception("Le fichier avec le chemin {$path} n'existe pas");
 
-        if(CategoryModel::getOne(intval($data['category_id']))->rowCount() === 0)
+        if (CategoryController::getOne(intval($data['category_id']))->rowCount() === 0)
             throw new Exception("Aucune catégorie ne porte l'id {$data['category_id']}");
 
         return $data;
@@ -99,6 +99,7 @@ class EntryModel {
 
     /**
      * Replace PDOStatement parameters with goods parameters
+     *
      * @param array        $data
      * @param PDOStatement $pdo
      */
@@ -144,10 +145,10 @@ class EntryModel {
     }
 
     /**
-     * @param int $id
-     * @param array $data
+     * @param int   $id   The id of the entry we want to update
+     * @param array $data The data array
      *
-     * @return mixed
+     * @return int The id of the updated entry
      * @throws Exception
      */
     static public function updateEntry($id, $data) {

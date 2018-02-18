@@ -6,7 +6,7 @@
             <td>
                 <h2>Nombre de personnes dans l'annuaire</h2>
 
-                <?= EntryModel::get()->rowCount() ?>
+                <?= EntryController::get()->rowCount() ?>
             </td>
             <td>
                 <h2>Nombre de consultations de l'annuaire</h2>
@@ -35,7 +35,7 @@
             <td>
                 <h2>Dernière personne ajoutée</h2>
 
-                <?php generateBox(EntryModel::getLast()->fetch()); ?>
+                <?php generateBox(EntryController::getLast()->fetch()); ?>
             </td>
             <td></td>
         </tr>
