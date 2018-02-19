@@ -1,4 +1,8 @@
-<?php $startTime = microtime(true); ?>
+<?php 
+$startTime = microtime(true); 
+ini_set('display_errors', 'stdout');
+ini_set('error_reporting', E_ALL);
+?>
 <!DOCTYPE HTML>
 <html>
 <head>

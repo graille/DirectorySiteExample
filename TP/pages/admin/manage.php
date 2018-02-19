@@ -71,7 +71,8 @@ try {
             if ($finder->rowCount() === 0) {
                 $name = $_POST['category_str'];
                 CategoryController::add($name);
-                $data['category_id'] = (CategoryController::getOneByName($name)->fetch())['id'];
+                $category = CategoryController::getOneByName($name)->fetch();
+                $data['category_id'] = $category['id'];
             } else
                 $data['category_id'] = $finder->fetch()['id'];
         } else {
@@ -119,7 +120,7 @@ if($editEntryMode) $actionPath .= "&&id={$editEntryData['id']}";
 
     <?php if(isset($completed) && $completed === true) { ?>
         <div class="width-full" style="background-color: green; color: white; padding: 20px">
-            <?php if($editEntryMode && isset($_GET['id'])) { ?>
+            <?php if($editEntryMode && !empty($_GET['id'])) { ?>
                 Modification de <?= getValue('firstname').' '.getValue('lastname') ?> efféctuée
             <?php } else { ?>
                 Ajout de <?= getValue('firstname').' '.getValue('lastname') ?> efféctué

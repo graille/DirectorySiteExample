@@ -8,7 +8,7 @@ class EntryController {
         return "SELECT e.*, c.name AS category_name 
             FROM entries AS e
             JOIN categories AS c 
-              ON c.id = e.category_id";
+              ON c.id = e.category_id ";
     }
 
     /**
@@ -55,7 +55,7 @@ class EntryController {
 
     static public function getLast() {
         $query = self::getBaseQuery();
-        $query .= " ORDER BY e.created DESC LIMIT 1";
+        $query .= " ORDER BY e.created DESC LIMIT 1;";
 
         return PDOManipulator::create()
             ->query($query);
