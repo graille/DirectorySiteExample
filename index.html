@@ -2,20 +2,44 @@
   <head>
     <meta charset="UTF-8" />
     <title>ATE202 - Piana/Boudhar</title>
+    <link href="https://fonts.googleapis.com/css?family=Karma" rel="stylesheet">
     <style type="text/css">
+      body {
+        font-family: 'Karma', serif;
+      }
+    
       table {
         border-collapse: collapse;
         margin: auto;
         width: 70%;
       }
 
-      table, th, td {
+      table td {
         border: 1px solid black;
-        margin: auto;
-        width: 70%; 
+        padding: 10px;
+        margin-top:10px;
+        transition: padding 0.2s ease-in;
       }
+      
+      a {
+        text-decoration: none;
+      }
+      
+      table tr:nth-child(odd) {
+          background-color: #6495ED;
+          transition: all 1s ease-in;
+      }
+      
+      table tr:nth-child(odd):hover {
+          background-color: #333;
+      }
+      
+      table tr:nth-child(odd) a {
+          color: white;
+      }
+      
       h3 {
-	margin: auto;
+        margin: auto;
         width: 30%; 
       }
     </style>
