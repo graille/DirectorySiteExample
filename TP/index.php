@@ -42,6 +42,7 @@ ini_set('error_reporting', E_ALL);
 
         $action = (!empty($_GET['page'])) ? $_GET['page'] : 'user.directory';
         $action = explode('.', $action);
+        $allowed_pages = array("directory", "stats", "manage", "homepage");
 
         if(count($action) === 2) {
             $page = $action[1];
@@ -51,12 +52,12 @@ ini_set('error_reporting', E_ALL);
             $section = 'user';
         }
 
-        if(file_exists("pages/{$section}/{$page}.php")) {
+        if(file_exists("pages/{$section}/{$page}.php") && in_array($page, $allowed_pages)) {
             require "pages/{$section}/{$page}.php";
             StatsController::addVisit($section . '.' . $page, microtime(true) - $startTime);
         }
         else
-            echo "<h2 style='background-color: orangered; border-radius: 0'>ERREUR 404<br />La page demandée n'existe pas :/</h2>"
+            echo "<h2 style='background-color: orangered; border-radius: 0'>ERREUR 404<br />La page demandée n'existe pas ou n'est pas accessible :/</h2>";
     ?>
 </section>
 

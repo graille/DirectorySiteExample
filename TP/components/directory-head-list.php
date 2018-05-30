@@ -1,7 +1,7 @@
 <?php
 function generateHeadListEntry($data = [], $isAdmin = false) {
     ?>
-    <td><img src="<?= $data['image_path'] ?>" alt="<?= $data["firstname"] ?> profile picture" style="max-height: 200px; border-radius: 10px;"/></td>
+    <td><img src="<?= $data['image_path'] ?>" alt="<?= $data["firstname"] ?> profile picture" style="max-height: 160px; border-radius: 10px;"/></td>
     <td><?= $data['firstname'] ?></td>
     <td><?= $data['lastname'] ?></td>
     <td><?= Utils::calculateAgeFromTimestamp($data['birthday']) ?> ans</td>

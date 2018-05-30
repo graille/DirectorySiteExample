@@ -45,6 +45,11 @@ try {
             if (!in_array($extension, $validImageExtensions))
                 throw new Exception("Extension incorrecte, les extensions autorisées sont : " . DataManipulator::transformArrayToString($validImageExtensions));
 
+            // Check type
+            $type = mime_content_type($_FILES['image']['tmp_name']);
+            $explodedType = explode('/', $type);
+
+            if($explodedType[0] !== 'image') throw new Exception("Le fichier n'est pas une image");
             // Move image
             if (!file_exists('uploads/avatars'))
                 mkdir('uploads/avatars', 0777, true);

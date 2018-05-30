@@ -23,10 +23,5 @@
             </td>
         </tr>
     </table>
-    <?php
-    if ($style === "table")
-        generateHeadList();
-    else
-        generateBoxList();
-    ?>
+    <?php ($style === "table") ? generateHeadList() : generateBoxList(2); ?>
 </div>

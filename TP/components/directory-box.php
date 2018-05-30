@@ -76,7 +76,7 @@ function generateBoxList($nbPerRow = 3) {
         if ($i % $nbPerRow === 0 && $i > 0) echo '</tr>';
         if ($i % $nbPerRow === 0) echo '<tr>';
 
-        echo '<td style="width: ' . (100 / $nbPerRow) . '%">';
+        echo '<td style="width: ' . round((100 / $nbPerRow)) . '%">';
         generateBox($data);
         echo '</td>';
 
